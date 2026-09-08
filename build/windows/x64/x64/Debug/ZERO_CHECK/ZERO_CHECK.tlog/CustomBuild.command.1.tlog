@@ -1,0 +1,10 @@
+^C:\USERS\25163078\DESKTOP\PPDM\CURSOSAPP\BUILD\WINDOWS\X64\CMAKEFILES\1E033E7D76538727D9DA3F58DD04DDE6\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/25163078/Desktop/ppdm/CursosApp/windows -BC:/Users/25163078/Desktop/ppdm/CursosApp/build/windows/x64 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/25163078/Desktop/ppdm/CursosApp/build/windows/x64/aplicativo_cursos.slnx
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
