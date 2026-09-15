@@ -44,15 +44,15 @@ class InicioTela extends StatelessWidget{
                     )
                   ]
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
+                const Icon(
                   Icons.flutter_dash,
                   color: Colors.white,
                   size: 46,
                   ),
-                  Text(
+                  const Text(
                     'Flutter Básico',
                     style: TextStyle(
                       color: Colors.white,
@@ -60,15 +60,24 @@ class InicioTela extends StatelessWidget{
                       fontWeight: FontWeight.bold
                     ),
                   ),
-                  Text(
+                  const Text(
                     '8 de 12 aulas concluidas',
                     style: TextStyle(
                       color: Colors.white,
                     ),
-                  )
+                  ),
+
+                  const SizedBox(height: 12),
+                   LinearProgressIndicator(
+                   value: 8 / 12, 
+                   backgroundColor: Colors.white24, 
+                   valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),                   minHeight: 8, // Define a espessura da barra
+                   borderRadius: BorderRadius.circular(4
+                  ), // Bordas arredondadas na barra
+                ),
               ],
             ),
-          )
+         )
       ],
     );
   }

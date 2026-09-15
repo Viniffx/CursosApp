@@ -37,6 +37,9 @@ final cursos =[
 }
 
 class CursoDescrito extends StatelessWidget{
+  const CursoDescrito({super.key});
+
+  @override
   Widget build(BuildContext context){
     return ListView(
       padding: const EdgeInsets.all(20),
