@@ -1,76 +1,34 @@
 import 'package:flutter/material.dart';
+import '../dados/favoritos.dart';
+import '../widgets/curso_card.dart';
 
-class FavoritosTela extends StatelessWidget{
+class FavoritosTela extends StatelessWidget {
   const FavoritosTela({super.key});
 
   @override
-  Widget build(BuildContext context){ 
-
-    return ListView(
-      padding: const EdgeInsets.all(20),
-      children: [
-        Text(
-          'Seus Favoritos',
-          style: Theme.of(context)
-          .textTheme
-          .headlineMedium
-          ?.copyWith(fontWeight: FontWeight.bold,
-          ),
-          ),
-          // const SizedBox(
-          //  height: 8,
-          // ),
-
-          // const Text(
-          //    'Continue aprendendo e evoluindo.'
-          // ),
-
-          const SizedBox( height: 24,),
-
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: const LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 10, 55, 153),
-                  Color.fromARGB(255, 43, 100, 223)
-                  ]
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      offset: Offset(0, 5)
-                    )
-                  ]
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.flutter_dash,
-                  color: Colors.white,
-                  size: 46,
-                  ),
-                  Text(
-                    'Flutter Básico',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  Text(
-                    '8 de 12 aulas concluidas',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  )
-              ],
-            ),
-          )
-      ],
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Set<String>>(
+      valueListenable: cursosFavoritos,
+      builder: (context, favoritos, _) {
+        return favoritos.isEmpty
+            ? const Center(child: Text('Nenhum curso favorito'))
+            : ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: favoritos.length,
+                itemBuilder: (context, indice) {
+                  final curso = favoritos.elementAt(indice);
+                  return CursoCard(
+                    curso: curso,
+                    favorito: true,
+                    onFavoritoPressed: () {
+                      final favoritosAtualizados = Set<String>.from(favoritos)
+                        ..remove(curso);
+                      cursosFavoritos.value = favoritosAtualizados;
+                    },
+                  );
+                },
+              );
+      },
     );
   }
 }

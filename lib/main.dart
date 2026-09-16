@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dados/configuracao_visual.dart';
 import 'telas/perfil_tela.dart';
 import 'telas/cursos_tela.dart';
 import 'telas/inicio_tela.dart';
@@ -13,29 +14,54 @@ class MeuApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(
-        seedColor: Color.fromARGB(255, 10, 55, 153)
-      ),
-      scaffoldBackgroundColor: const Color(0xfff5f3fa), 
-      useMaterial3: true,
-      navigationBarTheme: const NavigationBarThemeData(
-        backgroundColor: Color.fromARGB(255, 10, 55, 153),
-        indicatorColor: Colors.white24,
-        iconTheme: WidgetStatePropertyAll(
-          IconThemeData(
-            color: Colors.white
-          )
-        ),
-        labelTextStyle: WidgetStatePropertyAll(
-          TextStyle(
-            color: Colors.white
-          )
-        )
-      )
-      ),
-      home: const HomePage(),
+    return ValueListenableBuilder<ConfiguracaoVisual>(
+      valueListenable: configuracaoVisual,
+      builder: (context, configuracao, _) {
+        final brightness = configuracao.modoEscuro
+            ? Brightness.dark
+            : Brightness.light;
+        final scheme = ColorScheme.fromSeed(
+          seedColor: configuracao.corPrincipal,
+          brightness: brightness,
+        );
+
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: scheme,
+            scaffoldBackgroundColor: configuracao.modoEscuro
+                ? const Color(0xff101817)
+                : const Color(0xfff4f7f6),
+            useMaterial3: true,
+            appBarTheme: AppBarTheme(
+              backgroundColor: configuracao.corPrincipal,
+              foregroundColor: scheme.onPrimary,
+            ),
+            cardTheme: CardThemeData(
+              color: configuracao.modoEscuro
+                  ? const Color(0xff1c2927)
+                  : Colors.white,
+              elevation: 2,
+              margin: const EdgeInsets.symmetric(vertical: 6),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+                side: BorderSide(color: scheme.outlineVariant),
+              ),
+            ),
+            navigationBarTheme: NavigationBarThemeData(
+              backgroundColor: configuracao.corMenuInferior,
+              indicatorColor: configuracao.corPrincipal,
+              iconTheme: const WidgetStatePropertyAll(
+                IconThemeData(color: Colors.white),
+              ),
+              labelTextStyle: const WidgetStatePropertyAll(
+                TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          home: const HomePage(),
+        );
+      },
     );
   }
 }

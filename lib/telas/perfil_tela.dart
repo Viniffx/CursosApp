@@ -1,5 +1,6 @@
-//import 'editar_perfil_tela.dart';
+import 'editar_perfil_tela.dart'; 
 import 'package:flutter/material.dart';
+import '../dados/configuracao_visual.dart';
 
 class PerfilTela extends StatelessWidget {
   const PerfilTela({super.key});
@@ -11,7 +12,7 @@ class PerfilTela extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch, // Faz os filhos preencherem toda a largura da coluna
+          crossAxisAlignment: CrossAxisAlignment.stretch, 
           children: [
             const Center(
               child: CircleAvatar(
@@ -46,7 +47,12 @@ class PerfilTela extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditarPerfilTela(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 10, 55, 153), // Cor personalizada
@@ -56,7 +62,6 @@ class PerfilTela extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-
                 child: const Text(
                   'Editar perfil',
                   style: TextStyle(
@@ -67,6 +72,72 @@ class PerfilTela extends StatelessWidget {
               ),
             ),
             
+            const SizedBox(height: 16), 
+
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: ValueListenableBuilder<ConfiguracaoVisual>(
+                  valueListenable: configuracaoVisual,
+                  builder: (context, configuracao, _) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Personalização',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 8),
+                        SwitchListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: const Text('Modo escuro'),
+                          secondary: const Icon(Icons.dark_mode_outlined),
+                          value: configuracao.modoEscuro,
+                          onChanged: (valor) {
+                            configuracaoVisual.value = configuracao.copyWith(
+                              modoEscuro: valor,
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Cor principal'),
+                        _OpcoesDeCor(
+                          selecionada: configuracao.corPrincipal,
+                          opcoes: const [
+                            Color(0xff0f766e),
+                            Color(0xff1565c0),
+                            Color(0xff8e24aa),
+                            Color(0xffc2410c),
+                          ],
+                          onChanged: (cor) {
+                            configuracaoVisual.value = configuracao.copyWith(
+                              corPrincipal: cor,
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Cor do menu inferior'),
+                        _OpcoesDeCor(
+                          selecionada: configuracao.corMenuInferior,
+                          opcoes: const [
+                            Color(0xff153243),
+                            Color(0xff263238),
+                            Color(0xff4527a0),
+                            Color(0xff7f1d1d),
+                          ],
+                          onChanged: (cor) {
+                            configuracaoVisual.value = configuracao.copyWith(
+                              corMenuInferior: cor,
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+
             // Card 1: Flutter Developer em andamento
             const Card(
               elevation: 2,
@@ -122,3 +193,37 @@ class PerfilTela extends StatelessWidget {
     );
   }
 }
+
+class _OpcoesDeCor extends StatelessWidget {
+  const _OpcoesDeCor({
+    required this.selecionada,
+    required this.opcoes,
+    required this.onChanged,
+  });
+
+  final Color selecionada;
+  final List<Color> opcoes;
+  final ValueChanged<Color> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: opcoes.map((cor) {
+        final selecionada = cor == this.selecionada;
+        return ChoiceChip(
+          label: const SizedBox(width: 24, height: 24),
+          selected: selecionada,
+          backgroundColor: cor,
+          selectedColor: cor,
+          side: BorderSide(
+            color: selecionada ? Colors.white : Colors.transparent,
+            width: 2,
+          ),
+          onSelected: (_) => onChanged(cor),
+        );
+      }).toList(),
+    );
+  }
+}
+
